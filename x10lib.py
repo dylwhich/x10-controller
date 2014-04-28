@@ -60,7 +60,7 @@ class Action:
 
 # Complete signal to a device, including housecode, unit, and action.
 class Signal:
-    def __init__(self, housecode, unit, action):
+    def __init__(self, housecode, unit, action, repetitions=1):
         # Ensure that the housecode and unit are of the appropriate
         # class types.
         if type(housecode) != HouseCode:
@@ -76,5 +76,13 @@ class Signal:
         self.unit = unit
         self.action = action
 
+        # Only if there is more than one repetition, repeat it.
+        if repetitions > 1:
+            self.repetitions = repetitions
+
     def __str__(self):
-        return "{housecode}{unit}{action}".format(**self.__dict__)
+        args = self.__dict__
+        if self.repetitions > 1:
+            args["repetitions"] = ""
+
+        return "{housecode}{unit}{action}{repetitions}".format(**args)
