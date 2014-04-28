@@ -95,3 +95,25 @@ class Signal:
             args["repetitions"] = ""
 
         return "{housecode}{unit}{action}{repetitions}".format(**args)
+
+# Signal.parse attempts to parse a signal of either plain or fixed
+# width format.
+@classmethod
+def parseSignal(cls, signal_str):
+    # Parse the basic components of the signal first. It follows the
+    # format A01+, where A is the housecode, 01 is the unit number,
+    # and + is the action.
+    housecode = HouseCode(signal_str[0])
+    unit = Unit(int(str(signal_str[1:3])))
+    action = Action(signal_str[3])
+
+    # If the length of the string is greater than 4, then it also
+    # includes a repetition number. Otherwise, just set it to 1.
+    if len(signal_str) > 4:
+        repetitions = int(signal_str[4:])
+    else:
+        repetitions = 1
+
+    return cls(housecode, unit, action, repetitions)
+
+Signal.parse = parseSignal
