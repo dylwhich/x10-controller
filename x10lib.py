@@ -76,9 +76,18 @@ class Signal:
         self.unit = unit
         self.action = action
 
-        # Only if there is more than one repetition, repeat it.
-        if repetitions > 1:
-            self.repetitions = repetitions
+        # Store the number of repetitions, if given, but it must be at
+        # least 1.
+        self.repetitions = max(repetitions, 1)
+
+    def format(self, std):
+        if std == "plain":
+            return str(self)
+        elif std == "json":
+            return str(self.__dict__)
+        elif std == "fixedwidth":
+            return "{housecode}{unit}{action}{repetitions:02d}".format(**self.__dict__)
+            
 
     def __str__(self):
         args = self.__dict__

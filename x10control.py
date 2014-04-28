@@ -10,10 +10,7 @@ def main(args):
     if args.verbose >= 2: print("Opening {}".format(args.fifo))
     with open(args.fifo, "wb") as fifo:
         if args.verbose >= 2: print("Opened {}".format(args.fifo))
-        if args.type == "plain":
-            output = str(s)
-        elif args.type == "json":
-            output = str(s.__dict__)
+        output = s.format(args.type)
 
         if args.verbose: print(output)
         if not args.dry: fifo.write(output)
@@ -41,7 +38,7 @@ def parse(argv):
     parser = argparse.ArgumentParser("Send x10 signals from the command line")
     parser.add_argument("--fifo", "-f", help="socket to send commands to",
                         default="/etc/x10ctl")
-    parser.add_argument("--type", "-t", choices=["plain", "json"],
+    parser.add_argument("--type", "-t", choices=["plain", "json", "fixedwidth"],
                         default="plain", help="way to format output")
     parser.add_argument("--verbose", "-v", action="count",
                         help="log output to fifo")
