@@ -22,9 +22,12 @@ class Daemon:
 
         with open(self.fifopath, "rb") as fifo:
             while True:
-                signal_str = fifo.read(6)
-                s = x10.Signal.parse(signal_str)
-                self.enqueue(s)
+                signal_str = str(fifo.readline())
+                try:
+                    s = x10.Signal.parse(signal_str)
+                    self.enqueue(s)
+                except ValueError:
+                    log("Bad signal from fifo: {}".format(signal_str))
 
     # Put a signal on the queue along with a priority as determined by
     # prioritize(signal).
