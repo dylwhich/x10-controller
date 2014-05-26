@@ -15,6 +15,9 @@ out of bounds (A <= code <= P)".format(letter))
     def __str__(self):
         return self.letter
 
+    def __int__(self):
+        return ord(self.letter) - ord("A")
+
     def __repr__(self):
         return "'{}'".format(self.letter)
 
@@ -37,6 +40,24 @@ out of bounds (1 <= unit <= 16)".format(number))
     def __repr__(self):
         return str(self.number + 1)
 
+ACTIONS = [
+         # One-way codes
+    "k", # (Kill) All units off
+    "L", # All lights on
+    "+", # On
+    "-", # Off
+    "d", # Dim
+    "b", # Brighten
+    "l", # All lights off
+    "e", # Extended code
+         # Two-way codes
+    "h", # Hail request
+    "H", # Hail acknowledge
+    "p", # Pre-set dim
+    "S", # Status is on
+    "s", # Status is off
+    "R"  # Request device status
+]
 
 # Turn the unit on, off, brighten, or dim.
 class Action:
@@ -49,15 +70,18 @@ class Action:
                 self.action = "-"
 
         else:
-            action = action.upper()
-            if action in [ "+", "-", "B", "D" ]:
+            if action in ACTIONS:
                 self.action = action
+                self.code = ACTIONS.index(action)
             else:
                 raise KeyError("Action {} invalid \
 (action must be True, False, +, -, B, or D)".format(action))
 
     def __str__(self):
         return self.action
+
+    def __int__(self):
+        return self.code
 
     def __repr__(self):
         return "'{}'".format(self.action)
