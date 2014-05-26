@@ -9,8 +9,8 @@ class HouseCode:
 
         # Accept only letters between A and P, inclusive.
         if not ("A" <= letter <= "P"):
-            raise OutOfBoundsException("House code {} \
-out of bounds (A <= code <= P)".format(letter))
+            raise ValueError("House code {} invalid \
+(A <= code <= P)".format(letter))
 
         self.letter = letter
 
@@ -28,8 +28,8 @@ class Unit:
     def __init__(self, number):
         # Accept only numbers between 1 and 16, inclusive.
         if not (1 <= number <= 16):
-            raise OutOfBoundsException("Unit {} \
-out of bounds (1 <= unit <= 16)".format(number))
+            raise ValueError("Unit {} invalid \
+(1 <= unit <= 16)".format(number))
 
         self.number = number - 1
 
@@ -76,8 +76,8 @@ class Action:
                 self.action = action
                 self.code = ACTIONS.index(action)
             else:
-                raise KeyError("Action {} invalid \
-(action must be True, False, +, -, B, or D)".format(action))
+                raise ValueError("Action {} invalid \
+(action must be in {})".format(action, ACTIONS))
 
     def __str__(self):
         return self.action
