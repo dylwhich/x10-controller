@@ -17,7 +17,7 @@ class Daemon:
         # Make the fifo if it doesn't exist.
         try:
             os.mkfifo(self.fifopath)
-        except IOError:
+        except OSError:
             pass
 
         with open(self.fifopath, "rb") as fifo:
