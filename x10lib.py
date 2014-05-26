@@ -26,13 +26,17 @@ class Unit:
             raise OutOfBoundsException("Unit {} \
 out of bounds (1 <= unit <= 16)".format(number))
 
-        self.number = number
+        self.number = number - 1
 
     def __str__(self):
-        return "{:02d}".format(self.number)
+        return "{:02d}".format(self.number + 1)
+
+    def __int__(self):
+        return self.number
 
     def __repr__(self):
-        return str(self.number)
+        return str(self.number + 1)
+
 
 # Turn the unit on, off, brighten, or dim.
 class Action:
