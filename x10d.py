@@ -7,7 +7,7 @@ import x10lib as x10
 class Daemon:
     def __init__(self, fifo="/etc/x10ctl",
                  statedb="/etc/x10state.db",
-                 serial="/dev/ttyACM0"):
+                 serial="/dev/ttyAMA0"):
         self.fifopath = fifo
         self.statedbpath = statedb
         self.serialpath = serial
@@ -90,7 +90,7 @@ def parse(argv):
     parser.add_argument("--statedb", default="/etc/x10state.db",
                         help="Database to store unit states in")
 
-    parser.add_argument("--serial", default="/dev/ttyACM0",
+    parser.add_argument("--serial", default="/dev/ttyAMA0",
                         help="Serial port to use")
 
     return parser.parse_args(argv)
