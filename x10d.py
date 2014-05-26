@@ -43,7 +43,7 @@ class Daemon:
 
         # Query the serial port for a "ready" signal.
         # TODO: replace with control signal
-        conn.write("READY?")
+        conn.write(bytes(1))
 
         # Continuously retrieve from the queue and send them to the
         # serial port. Prioritized signals are sent first.
