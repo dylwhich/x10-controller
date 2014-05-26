@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import struct
+
 # House code as determined by letter (A-P)
 class HouseCode:
     def __init__(self, letter):
@@ -56,7 +58,7 @@ ACTIONS = [
     "p", # Pre-set dim
     "S", # Status is on
     "s", # Status is off
-    "R"  # Request device status
+    "R"  # Request device status 
 ]
 
 # Turn the unit on, off, brighten, or dim.
@@ -103,6 +105,7 @@ class Signal:
         self.housecode = housecode
         self.unit = unit
         self.action = action
+        self.control = False # Not implemented
 
         # Store the number of repetitions, if given, but it must be at
         # least 1.
@@ -116,6 +119,38 @@ class Signal:
         elif std == "fixedwidth":
             return "{housecode}{unit}{action}{repetitions:02d}".format(**self.__dict__)
             
+    def serialize(self):
+        # Nibbles is a big-endian assembled list containing data to be
+        # serialized.
+        nibbles = []
+	
+        control_nibble = int(self.control) << 3
+        nibbles.append(control_nibble)
+
+        if self.control: # Not implemented
+            pass
+
+        else:
+            # The first data nibble is the housecode, folloewd by the
+            # unit and action.
+            nibbles.append(int(self.housecode)) 
+            nibbles.append(int(self.unit))
+            nibbles.append(int(self.action))
+
+            # The next two nibbles are the number of repetitions.
+            nibbles.append((int(self.repetitions) & 0b11110000) >> 4)
+            nibbles.append(int(self.repetitions) & 0b00001111)
+
+        # Add a checksum byte that is the XOR of the other three bytes.
+        nibbles.append(nibbles[0] ^ nibbles[2] ^ nibbles[4])
+        nibbles.append(nibbles[1] & nibbles[3] & nibbles[5])
+
+        # Concatenate all of the nibbles into bytes.
+        b = []
+        for nibble0, nibble1 in zip(nibbles[0::2], nibbles[1::2]):
+            b.append(bytes([(nibble0 << 4) | nibble1]))
+
+        return struct.pack("!cccc", *b) 
 
     def __str__(self):
         args = self.__dict__
@@ -145,3 +180,4 @@ def parseSignal(cls, signal_str):
     return cls(housecode, unit, action, repetitions)
 
 Signal.parse = parseSignal
+
