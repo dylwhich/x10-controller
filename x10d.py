@@ -13,6 +13,13 @@ class Daemon:
         self.serialpath = serial
         self.signals = queue.PriorityQueue()
 
+    def genline(self, f):
+        for b in f.read():
+            if b != '\n':
+                yield b
+            else:
+                return
+
     def listenfifo(self):
         # Make the fifo if it doesn't exist.
         try:
@@ -22,7 +29,7 @@ class Daemon:
 
         with open(self.fifopath, "rb") as fifo:
             while True:
-                signal_str = str(fifo.readline())
+                signal_str = ''.join(self.genline(fifo))
                 try:
                     s = x10.Signal.parse(signal_str)
                     self.enqueue(s)
