@@ -16,7 +16,7 @@ class Daemon:
     def genline(self, f):
         for b in f.read():
             if b != '\n':
-                yield b
+                yield str(b)
             else:
                 return
 
