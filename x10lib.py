@@ -158,6 +158,13 @@ class Signal:
     def __str__(self):
         return self.format("fixedwidth")
 
+    # Return True for all sorting operations, because signals are
+    # orderless.
+    def __lt__(self, rhs): return True
+    def __gt__(self, rhs): return True
+    def __le__(self, rhs): return True
+    def __ge__(self, rhs): return True
+
 # Signal.parse attempts to parse a signal of either plain or fixed
 # width format.
 @classmethod
