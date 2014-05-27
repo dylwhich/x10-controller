@@ -127,7 +127,7 @@ class Signal:
         # serialized.
         nibbles = []
 	
-        control_nibble = int(self.control) << 3
+        control_nibble = (1 << 4) | (int(self.control) << 3)
         nibbles.append(control_nibble)
 
         if self.control: # Not implemented
