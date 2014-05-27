@@ -33,7 +33,7 @@ class Daemon:
                 try:
                     s = x10.Signal.parse(signal_str)
                     self.enqueue(s)
-                except ValueError:
+                except (ValueError, IndexError):
                     log("Bad signal from fifo: {}".format(signal_str))
 
     # Put a signal on the queue along with a priority as determined by
