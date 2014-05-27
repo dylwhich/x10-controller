@@ -42,8 +42,8 @@ class Daemon:
     # prioritize(signal).
     def enqueue(self, signal):
         priority = self.prioritize(signal)
-
-        self.signals.put((priority, signal))
+        packet = (priority, signal)
+        self.signals.put(packet)
 
     def prioritize(self, signal):
         return 1
