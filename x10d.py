@@ -64,8 +64,10 @@ class Daemon:
             conn.read()
 
             # Once ready, get a signal from the connection and
-            # serialize it over.            
-            conn.write(self.signals.get().serialize())
+            # serialize it over.
+            priority, s = self.signals.get()
+            log("Serializing ({}, {})".format(priority, s))
+            conn.write(s.serialize())
             self.signals.task_done()
         
     # Daemonize by listening for signals on the fifo and consume them
