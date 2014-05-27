@@ -27,14 +27,16 @@ class Daemon:
         except OSError:
             pass
 
-        with open(self.fifopath, "rb") as fifo:
-            while True:
-                signal_str = ''.join(self.genline(fifo))
-                try:
-                    s = x10.Signal.parse(signal_str)
-                    self.enqueue(s)
-                except (ValueError, IndexError):
-                    log("Bad signal from fifo: {}".format(signal_str))
+        while True:
+            with open(self.fifopath, "r") as fifo:
+                for signal in fifo:
+                    signal_str = str(signal).strip()
+                    try:
+                        s = x10.Signal.parse(signal_str)
+                        self.enqueue(s)
+                    except (ValueError, IndexError) as e:
+                        log("Bad signal from fifo: {}, {}"\
+                            .format(signal_str, e))
 
     # Put a signal on the queue along with a priority as determined by
     # prioritize(signal).
