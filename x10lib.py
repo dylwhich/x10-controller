@@ -113,7 +113,10 @@ class Signal:
 
     def format(self, std):
         if std == "plain":
-            return str(self)
+            args = self.__dict__
+            if "repetitions" not in args:
+                args["repetitions"] = ""
+            return "{housecode}{unit}{action}{repetitions:02d}".format(**args)
         elif std == "json":
             return str(self.__dict__)
         elif std == "fixedwidth":
@@ -153,11 +156,7 @@ class Signal:
         return struct.pack("!cccc", *b) 
 
     def __str__(self):
-        args = self.__dict__
-        if self.repetitions > 1:
-            args["repetitions"] = ""
-
-        return "{housecode}{unit}{action}{repetitions}".format(**args)
+        return self.format("fixedwidth")
 
 # Signal.parse attempts to parse a signal of either plain or fixed
 # width format.
