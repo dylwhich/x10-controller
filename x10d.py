@@ -13,13 +13,6 @@ class Daemon:
         self.serialpath = serial
         self.signals = queue.PriorityQueue()
 
-    def genline(self, f):
-        for b in f.read():
-            if b != '\n':
-                yield str(b)
-            else:
-                return
-
     def listenfifo(self):
         # Make the fifo if it doesn't exist.
         try:
