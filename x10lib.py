@@ -127,7 +127,7 @@ class Signal:
         # serialized.
         nibbles = []
 	
-        control_nibble = (1 << 4) | (int(self.control) << 3)
+        control_nibble = (1 << 3) | (int(self.control) << 2)
         nibbles.append(control_nibble)
 
         if self.control: # Not implemented
@@ -146,7 +146,7 @@ class Signal:
 
         # Add a checksum byte that is the XOR of the other three bytes.
         nibbles.append(nibbles[0] ^ nibbles[2] ^ nibbles[4])
-        nibbles.append(nibbles[1] & nibbles[3] & nibbles[5])
+        nibbles.append(nibbles[1] ^ nibbles[3] ^ nibbles[5])
 
         # Concatenate all of the nibbles into bytes.
         b = []

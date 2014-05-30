@@ -54,13 +54,14 @@ class Daemon:
         # serial port. Prioritized signals are sent first.
         while True:
             # Wait until the serial port hears a request for more data.
-            conn.read()
+            #conn.read()
 
             # Once ready, get a signal from the connection and
             # serialize it over.
             priority, s = self.signals.get()
             log("Serializing ({}, {})".format(priority, s))
             conn.write(s.serialize())
+            print(conn.read())
             self.signals.task_done()
         
     # Daemonize by listening for signals on the fifo and consume them
