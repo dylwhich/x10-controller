@@ -32,6 +32,15 @@ class ControlPacket(Packet):
         return bytes(tmp)
 
 class DataPacket(Packet):
+    COMMAND_ON = 0
+    COMMAND_OFF = 1
+    COMMAND_ALL_LIGHT_ON = 2
+    COMMAND_ALL_LIGHTS_OFF = 3
+    COMMAND_ALL_UNITS_ON = 4
+    COMMAND_ALL_UNITS_OFF = 5
+    COMMAND_BRIGHT = 6
+    COMMAND_DIM = 7
+
     def __init__(self, house='A', unit=1, command=1, repetitions=1, encoded=None):
         if encoded:
             house = chr((encoded[0] & 0x0f) + 65)
