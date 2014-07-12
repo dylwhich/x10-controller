@@ -47,7 +47,14 @@ class Daemon:
     def listen(self):
         """Blocks for events from the dispatcher, forever."""
         while True:
-            self.report(self.dispatcher.next_event())
+            event = self.dispatcher.next_event()
+            # Don't report CONTROL things?
+
+            if event is not None:
+                if event.type == X10Event.TYPE_DATA:
+                    self.report(self.dispatcher.next_event())
+                elif event.type == X10Event.TYPE_CONTROL:
+                    print(str(event))
 
 class SerialDispatcher:
     def __init__(self, serial):
