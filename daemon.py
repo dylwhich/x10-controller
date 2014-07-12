@@ -1,5 +1,6 @@
 from packet import Packet, DataPacket, ControlPacket
 from serial import Serial
+from event import X10Event
 
 class Daemon:
     def __init__(self, dispatcher):
