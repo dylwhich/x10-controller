@@ -2,6 +2,8 @@ from packet import Packet, DataPacket, ControlPacket
 from serial import Serial
 from event import X10Event
 
+DEBUG = False
+
 class Daemon:
     def __init__(self, dispatcher):
         self.dispatcher = dispatcher
@@ -61,12 +63,22 @@ class SerialDispatcher:
         self.serial = serial
 
     def dispatch(self, packet):
-        return self.serial.write(packet.encode()) == Packet.PACKET_LENGTH
+        raw_bytes = packet.encode()
+        if DEBUG:
+            print(hex(int.from_bytes(raw_bytes,byteorder='big')))
+        written = self.serial.write(raw_bytes)
+        if DEBUG:
+            print("written: ", written)
+        return written == Packet.PACKET_LENGTH
 
     def has_event(self):
         return self.serial.inWaiting() >= Packet.PACKET_LENGTH
 
     def next_event(self):
         raw_bytes = self.serial.read(Packet.PACKET_LENGTH)
+        if DEBUG:
+            print(hex(int.from_bytes(raw_bytes,byteorder='big')))
         packet = Packet.decode(raw_bytes)
-        return packet and X10Event(packet)
+        if packet is not None:
+            return X10Event(packet)
+        return None
