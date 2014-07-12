@@ -49,6 +49,22 @@ class DataPacket(Packet):
     COMMAND_STATUS_OFF = 14
     COMMAND_STATUS_REQUEST = 15
 
+    DESCRIPTIONS = {
+        COMMAND_ON: "ON",
+        COMMAND_OFF: "OFF",
+        COMMAND_ALL_LIGHTS_ON: "LIGHTS ON",
+        COMMAND_ALL_LIGHTS_OFF: "LIGHTS OFF",
+        COMMAND_ALL_UNITS_OFF: "ALL OFF",
+        COMMAND_BRIGHT: "BRIGHT",
+        COMMAND_DIM: "DIM",
+        COMMAND_EXTENDED_CODE: "EXC",
+        COMMAND_HAIL_REQUEST: "HAIL REQ",
+        COMMAND_HAIL_ACKNOWLEDGE: "HAIL ACK",
+        COMMAND_EXTENDED_DATA: "EXTD",
+        COMMAND_STATUS_ON: "S ON",
+        COMMAND_STATUS_OFF: "S OFF",
+        COMMAND_STATUS_REQUEST: "S REQ"}
+
     def __init__(self, house='A', unit=1, command=1, repetitions=1, encoded=None):
         if encoded:
             house = chr((encoded[0] & 0x0f) + 65)

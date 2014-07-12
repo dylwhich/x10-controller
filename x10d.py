@@ -6,7 +6,7 @@ import sys
 
 def callback(event):
     if event:
-        print("EVENT: {0.house}{0.unit}: {0.command}".format(event))
+        print(str(event))
 
 def listen(daemon):
     house, unit, act = input().split()
