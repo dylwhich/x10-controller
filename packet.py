@@ -19,6 +19,13 @@ class Packet:
         pass
 
 class ControlPacket(Packet):
+    OPCODE_READY_STATUS = 0
+    OPCODE_TERMINATE = 1
+    OPCODE_ACKNOWLEDGE = 2
+
+    DATA_READY_STATUS_NOT_READY = 0
+    DATA_READY_STATUS_READY = 1
+
     def __init__(self, opcode=0, data=0, encoded=None):
         if encoded:
             opcode = encoded[0] & 0x0f
