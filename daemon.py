@@ -54,7 +54,7 @@ class Daemon:
 
             if event is not None:
                 if event.type == X10Event.TYPE_DATA:
-                    self.report(self.dispatcher.next_event())
+                    self.report(event)
                 elif event.type == X10Event.TYPE_CONTROL:
                     print(str(event))
 
