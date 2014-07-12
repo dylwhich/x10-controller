@@ -15,6 +15,10 @@ class Daemon:
         """Unsubscribes an observer from events"""
         self.observers.remove(observer)
 
+    def report(self, event):
+        for f in observers:
+            f(event)
+
     def on(self, house, unit=None):
         """Sends an on command to the specified house and unit, or entire house if unit is None"""
         if unit:
@@ -35,11 +39,15 @@ class Daemon:
     def raw(self, packet):
         """Sends a raw packet. Be careful!"""
         if dispatcher.dispatch(packet):
-            for f in observers:
-                event = X10Event(packet)
-                f(event)
+            event = X10Event(packet)
+            report(event)
             return True
         return False
+
+    def listen(self):
+        """Blocks for events from the dispatcher, forever."""
+        while True:
+            report(dispatcher.next_event())
 
 class SerialDispatcher:
     def __init__(self, serial):
@@ -47,3 +55,11 @@ class SerialDispatcher:
 
     def dispatch(self, packet):
         return self.serial.write(packet.encode()) == Packet.PACKET_LENGTH
+
+    def has_event(self):
+        return self.serial.inWaiting() >= Packet.PACKET_LENGTH
+
+    def next_event(self):
+        raw_bytes = self.serial.read(Packet.PACKET_LENGTH)
+        packet = Packet.decode(raw_bytes)
+        return packet and X10Event(packet)
