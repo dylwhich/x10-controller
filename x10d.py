@@ -19,15 +19,20 @@ def listen(daemon):
 def main(args):
     serial_port = args[1]
     baud = 9600
-    
     s = Serial(serial_port, baud)
+
     dispatcher = SerialDispatcher(s)
     daemon = Daemon(dispatcher)
     daemon.subscribe(callback)
 
     daemon_thread = Thread(target=daemon.listen, name="daemon-listener")
     daemon_thread.start()
+
+    user_thread = Thread(target=listen, args=(daemon,), name="user-listener")
+    user_thread.start()
+
     daemon_thread.join()
+    user_thread.join()
     s.close()
 
 if __name__ == "__main__":
