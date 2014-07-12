@@ -46,4 +46,4 @@ class SerialDispatcher:
         self.serial = serial
 
     def dispatch(self, packet):
-        pass
+        return self.serial.write(packet.encode()) == Packet.PACKET_LENGTH
