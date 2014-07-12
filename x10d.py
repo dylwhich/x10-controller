@@ -1,16 +1,25 @@
 #!/usr/bin/env python
 from daemon import Daemon, SerialDispatcher
 from serial import Serial
+from threading import Thread
+import sys
 
-if __name__ == "__main__":
-    # TODO: Get these from arguments
-    serial_port = "/dev/ttyACM0"
+def callback(event):
+    print("EVENT: {0.house}{0.unit}: {0.command}".format(event))
+
+def main(args):
+    serial_port = "/dev/ttyACM1"
     baud = 9600
     
     s = Serial(serial_port, baud)
     dispatcher = SerialDispatcher(s)
     daemon = Daemon(dispatcher)
+    daemon.subscribe(callback)
 
-    daemon_thread = Thread(target=daemon.listen, name="daemon-listener"))
+    daemon_thread = Thread(target=daemon.listen, name="daemon-listener")
     daemon_thread.start()
     daemon_thread.join()
+
+if __name__ == "__main__":
+    # TODO: Parse arguments for things
+    main(sys.argv)

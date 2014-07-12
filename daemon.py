@@ -9,7 +9,7 @@ class Daemon:
 
     def subscribe(self, observer):
         """Subscribes an observer callback of the form f(X10Event)"""
-        self.listeners.append(observer)
+        self.observers.append(observer)
 
     def unsubscribe(self, observer):
         """Unsubscribes an observer from events"""

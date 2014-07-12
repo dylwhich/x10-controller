@@ -1,3 +1,4 @@
+from packet import Packet, DataPacket
 class X10Event:
     UNIT_ALL = 0
     def __init__(self, packet):
