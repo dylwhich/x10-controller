@@ -5,7 +5,16 @@ from threading import Thread
 import sys
 
 def callback(event):
-    print("EVENT: {0.house}{0.unit}: {0.command}".format(event))
+    if event:
+        print("EVENT: {0.house}{0.unit}: {0.command}".format(event))
+
+def listen(daemon):
+    house, unit, act = input().split()
+    unit = int(unit)
+    if act.upper() == "ON":
+        daemon.on(house, unit)
+    elif act.upper() == "OFF":
+        daemon.off(house, unit)
 
 def main(args):
     serial_port = args[1]

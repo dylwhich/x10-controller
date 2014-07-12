@@ -55,14 +55,14 @@ class DataPacket(Packet):
             unit = ((encoded[1] & 0xf0) >> 4) + 1
             command = (encoded[1] & 0x0f)
             repetitions = encoded[2] or 1
-        self.house = house
+        self.house = house.upper()
         self.unit = unit
         self.command = command
         self.repetitions = repetitions
 
     def encode(self):
         # This could definitely be more pythonic. Somehow.
-        t0 = 0x80 | ((ord(self.house) - 65) & 0x0f)
+        t0 = 0x80 | ((ord(self.house.upper()) - ord('A')) & 0x0f)
         t1 = (((self.unit - 1) << 4) & 0xf0) | (self.command & 0x0f)
         t2 = self.repetitions
         tmp = [t0, t1, t2, t0 ^ t1 ^ t2]
