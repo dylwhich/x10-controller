@@ -16,7 +16,7 @@ class Daemon:
         self.observers.remove(observer)
 
     def report(self, event):
-        for f in observers:
+        for f in self.observers:
             f(event)
 
     def on(self, house, unit=None):
@@ -38,16 +38,16 @@ class Daemon:
 
     def raw(self, packet):
         """Sends a raw packet. Be careful!"""
-        if dispatcher.dispatch(packet):
+        if self.dispatcher.dispatch(packet):
             event = X10Event(packet)
-            report(event)
+            self.report(event)
             return True
         return False
 
     def listen(self):
         """Blocks for events from the dispatcher, forever."""
         while True:
-            report(dispatcher.next_event())
+            self.report(self.dispatcher.next_event())
 
 class SerialDispatcher:
     def __init__(self, serial):
