@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from daemon import Daemon, SerialDispatcher
 from serial import Serial
+import api
 from threading import Thread
 import sys
 
@@ -30,11 +31,15 @@ def main(args):
     daemon_thread = Thread(target=daemon.listen, name="daemon-listener")
     daemon_thread.start()
 
+    api_thread = Thread(target=api.run_api, args=(daemon,), name="web-api", daemon=True)
+    api_thread.start()
+
     user_thread = Thread(target=listen, args=(daemon,), name="user-listener")
     user_thread.start()
 
-    daemon_thread.join()
     user_thread.join()
+    daemon_thread.join()
+    api_thread.join()
     s.close()
 
 if __name__ == "__main__":
