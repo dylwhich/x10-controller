@@ -28,7 +28,7 @@ def main(args):
     daemon = Daemon(dispatcher)
     daemon.subscribe(callback)
 
-    daemon_thread = Thread(target=daemon.listen, name="daemon-listener")
+    daemon_thread = Thread(target=daemon.listen, name="daemon-listener", daemon=True)
     daemon_thread.start()
 
     api_thread = Thread(target=api.run_api, args=(daemon,), name="web-api", daemon=True)
